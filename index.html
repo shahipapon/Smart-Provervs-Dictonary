@@ -1,0 +1,255 @@
+<html>
+
+<head>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="files/css/style.css">
+    <link rel="stylesheet" href="files/css/searchstyle.css">
+
+
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css'
+        integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
+
+    <style>
+    </style>
+
+</head>
+<header style="text-align: center">
+    <h1>Learn English Common Words & Phrases </h1>
+    <hr>
+</header>
+
+<body bgcolor="#696845">
+    <p id="demo"></p>
+
+    <div class="div_top" id="mydiv">
+
+    </div>
+
+
+    <button style='font-size:24px' id="topme" class="div_bot" onclick="topFunction()"> <i
+            class='fas fa-angle-double-up'></i></button>
+            <div id="cover">
+                    <form method="get" action="">
+                      <div class="tb">
+                        <div class="td"><input type="text" placeholder="Search" id="searchbox"></div>
+                        <div class="td" id="s-cover">
+                          <button type="button" onclick="search_func()">
+                            <div id="s-circle"></div>
+                            <span></span>
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+
+</body>
+
+<script>
+
+    var store_word = [], store_syn = [], store_example = [], store_video = [], store_a = [];
+    var demo = [];
+    window.onscroll = function () { scrollFunction() };
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            document.getElementById("mydiv").style.top = "0";
+            document.getElementById("topme").style.display = "block";
+        } else {
+            document.getElementById("mydiv").style.top = "100px";
+            document.getElementById("topme").style.display = "none";
+        }
+    }
+    
+    $(document).ready(function () {
+
+        $('#topme').click(function () {
+            $("html, body").animate({ scrollTop: 0 }, 1500);
+            return false;
+        });
+    });
+
+    var id_no = [];
+    var letter;
+    var checkdata = false;
+
+    if (localStorage.getItem("myletter") === null) {
+        letter = "A";
+
+    }
+    else {
+        letter = localStorage.getItem("myletter");
+
+    }
+
+    //document.write("Toatl "+number+" will be generated;")
+    //change class document.getElementById("MyElement").classList.add('MyClass');
+
+
+    for (i = 0; i < 26; i++) {
+        id_no.push(i);
+        var parent_div = document.getElementById('mydiv');
+        var my_div = document.createElement('div');
+        my_div.id = i;
+        my_div.className = 'circle ';
+        my_div.onclick = checkletter;
+        my_div.appendChild(document.createTextNode((i + 10).toString(36).toUpperCase()));
+        parent_div.appendChild(my_div);
+
+    }
+
+
+    var col = ["#80c54a", "#b04e0d", "#f820a1", "#3b2c3e", "#18d360", "#96200d", "#b8025e", "#53a2fd"
+        , "#751c4f", "#33efa9", "#cc670b", "#2e23af", "#a771f4", "#e88a46", "#816a04", "#44a531", "#2dd016",
+        "#8df69e", "#5fd785", "#6ff97e", "#413be4", "#41ceb0", "#405be9", "#3a0e9f", "#a23c14", "#781588"];
+    for (i = 0; i < 26; i++) {
+
+        //  var ran = "#" + Math.floor(Math.random() * 16777255).toString(16);// 
+        //  if (ran != "#ffffff") {
+
+        document.getElementById(id_no[i]).style.backgroundColor = col[i];
+    }
+
+    //   console.log(col);
+
+    function checkletter() {
+        localStorage.setItem("myletter", String.fromCharCode(parseInt(this.id) + 65));
+
+        // letter = String.fromCharCode(parseInt(this.id)+65);
+
+        console.log(letter);
+        window.location.href = "index.html";
+
+        // console.log(letter.toLowerCase());
+    }
+    document.write("<br>" + "<br>" + "<br>" + "<br>");
+    var hrr = document.createElement('hr');
+    document.body.appendChild(hrr);
+
+
+    $.getJSON("data.json", function (data) {
+
+        var wrd, snmm, exmpl, vdo;
+
+        // console.log("hello " + data[2].word);
+        //console.log("hello bla bla "+data);
+
+    }).done(function (data) {
+        console.log("succes");
+        //document.write(data); //passing object only
+        $(data).each(function (index, value) {
+
+            var i;
+            console.log(checkdata);
+            if (!checkdata) {
+                value.word != "" ? store_word.push(value.word.charAt(0).toUpperCase() + value.word.slice(1)) : store_word.push(value.word);
+
+
+                value.synonym != "" ? store_syn.push("Synonym: ".bold() + value.synonym) : store_syn.push("Oops! No Synonym found in our database. :( ");
+
+                value.example != "" ? store_example.push("Example: ".bold() + value.example) : store_example.push("Oops! No Example found in our database. :( ");
+
+                store_video.push(value.video);
+
+            }
+
+            if (data[index].word[0] == letter || data[index].word[0] == letter.toLowerCase()) {
+
+                wrd = value.word;
+                wrd = wrd.charAt(0).toUpperCase() + wrd.slice(1);
+                store_a.push(wrd);
+            }
+        });
+
+        checkdata = true;
+
+        store_a.sort();
+     //   console.log(store_a.length);
+
+        for (i = 0; i < store_a.length; i++) {
+            // console.log(store_a[i]);
+            var my_div = document.createElement('div');
+            my_div.id = store_a[i];
+            my_div.className = 'blabla';
+            my_div.appendChild(document.createTextNode(store_a[i]));
+            my_div.onclick = dynamicEvent;
+            document.body.appendChild(my_div);
+
+
+            hrr = document.createElement('hr');
+            document.body.appendChild(hrr);
+
+            // document.getElementById("demo").innerHTML = ("hello1: "+store_a[i] + "<br>");
+            // document.write((i + 1 + ": " + demo[i] + "<br>"));
+        }
+
+        function dynamicEvent() {
+            var indexx = store_word.indexOf(this.id);
+
+            localStorage.setItem("word", store_word[indexx]);
+            localStorage.setItem("Synonym", store_syn[indexx]);
+            localStorage.setItem("Example", store_example[indexx]);
+            localStorage.setItem("Video", store_video[indexx]);
+            console.log(localStorage.getItem("Video"));
+            //  console.log("clicked_id" +localStorage.getItem("word1"));
+            window.location.href = "word_details.html";
+
+        }
+    }).fail(function () {
+        console.log("fail");
+    }).always(function () { });
+
+ 
+
+
+    function search_func() {
+
+//localStorage.setItem("search_var", document.getElementById("searchbox").value);
+
+// letter = String.fromCharCode(parseInt(this.id)+65);
+
+ //console.log(""+document.getElementById("searchbox").value);
+//window.location.href = "search.html";
+$("div.blabla").remove();
+$("hr").remove();
+
+
+for (i = 0; i < store_word.length; i++) {
+            // console.log(store_a[i]);
+
+            if (store_word[i].toLowerCase().includes(document.getElementById("searchbox").value.toLowerCase())) {
+                wrd = store_word[i];
+                wrd = wrd.charAt(0).toUpperCase() + wrd.slice(1);
+                store_a.push(wrd);
+
+            // document.getElementById("demo").innerHTML = ("hello1: "+store_a[i] + "<br>");
+            // document.write((i + 1 + ": " + demo[i] + "<br>"));
+        }
+    }
+
+    store_a.sort();
+     //   console.log(store_a.length);
+
+        for (i = 0; i < store_a.length; i++) {
+            // console.log(store_a[i]);
+            var my_div = document.createElement('div');
+            my_div.id = store_a[i];
+            my_div.className = 'blabla';
+            my_div.appendChild(document.createTextNode(store_a[i]));
+            my_div.onclick = "";
+            document.body.appendChild(my_div);
+
+
+            hrr = document.createElement('hr');
+            document.body.appendChild(hrr);
+
+            // document.getElementById("demo").innerHTML = ("hello1: "+store_a[i] + "<br>");
+            // document.write((i + 1 + ": " + demo[i] + "<br>"));
+        }
+
+
+}
+
+</script>
+
+</html>

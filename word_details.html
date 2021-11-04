@@ -1,0 +1,79 @@
+<html>
+
+<head>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <style>
+    hr {
+      width: auto;
+      margin-left: auto;
+      margin-right: auto;
+      height: auto;
+      background-color: rgb(109, 13, 13);
+      opcaity: 0.5;
+    }
+
+    .blabla {
+      font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+      font-size: 20px;
+      color: rgb(0, 0, 0);
+
+      padding: 10px 50px;
+      text-transform: capitalize;
+      text-align: center;
+      font-weight: 900;
+      
+
+      text-rendering: optimizeLegibility;
+    }
+  </style>
+
+
+
+</head>
+
+
+<body style="text-align: center" class="blabla" bgcolor="#696845">
+  <div id="word"></div>
+  <hr><br><br>
+  <div id="Synonym"></div>
+  <br><br>
+  <div id="Example"></div>
+  <br><br>
+  <div id="novid">
+    <iframe width="420" height="345" id="vid" src=""></iframe>
+
+  </div>
+  <script>
+
+
+    document.getElementById("word").innerHTML = ( localStorage.getItem("word") + "<br>");
+    document.getElementById("Synonym").innerHTML = (localStorage.getItem("Synonym") + "<br>");
+    document.getElementById("Example").innerHTML = (localStorage.getItem("Example") + "<br>");
+
+    if (localStorage.getItem("Video") != "") {
+
+
+      document.getElementById("vid").src = (localStorage.getItem("Video"));
+
+
+    }
+
+    else {
+      var iframes = document.querySelectorAll('iframe');
+      for (var i = 0; i < iframes.length; i++) {
+        iframes[i].parentNode.removeChild(iframes[i]);
+      }
+      document.getElementById("novid").innerHTML = "Oops! No Video found in our database. :( ";
+
+
+    }
+
+    function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+
+  </script>
+</body>
+
+</html>
